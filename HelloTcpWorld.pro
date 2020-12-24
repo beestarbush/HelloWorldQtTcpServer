@@ -1,5 +1,4 @@
-QT -= gui
-QT += core network sql
+QT += core network sql quick
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -47,3 +46,6 @@ HEADERS += \
     communication/tcp/TcpController.h \
     communication/tcp/TcpHandler.h \
     utils/Utils.h
+
+RESOURCES += \
+    gui/Resources.qrc
