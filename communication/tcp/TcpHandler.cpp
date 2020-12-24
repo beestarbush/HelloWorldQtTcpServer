@@ -1,5 +1,5 @@
-#include "TcpHandler.h"
-#include <RfidReaderMessage.h>
+#include "communication/tcp/TcpHandler.h"
+#include <dataobjects/RfidReaderDataObject.h>
 #include <QDebug>
 
 TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
@@ -7,9 +7,11 @@ TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
 	mParser(),
 	mSocketDescriptor(aId),
 	mIsConnected(false),
-	mUid("<UNKNOWN>")
+	mNodeInfoData(new NodeInfoDataObject),
+	mRfidReaderData(new RfidReaderDataObject)
 {
-
+	mParser.registerDataObject(MessageType::NODE_INFO_MESSAGE_TYPE, mNodeInfoData);
+	mParser.registerDataObject(MessageType::RFID_READER_MESSAGE_TYPE, mRfidReaderData);
 }
 
 void TcpHandler::run()
@@ -56,35 +58,22 @@ void TcpHandler::setIsConnected(bool aIsConnected)
 	}
 }
 
-QString TcpHandler::getUid() const
-{
-	return mUid;
-}
-
-void TcpHandler::setUid(const QString & aUid)
-{
-	if (mUid.compare(aUid) != 0)
-	{
-		mUid = aUid;
-		emit uidChanged();
-	}
-}
-
 void TcpHandler::readyRead()
 {
 	// get the information
-	QByteArray Data = mSocket->readAll();
+	QByteArray lData = mSocket->readAll();
 
 	// will write on server side window
-	qDebug() << mSocketDescriptor << " Data in: " << Data;
+	qDebug() << mSocketDescriptor << " Data in: " << lData;
 
-	if (!mParser.parse(((uint8_t*)Data.data()), Data.count()))
+	if (!mParser.parse(((uint8_t*)lData.data()), lData.count()))
 	{
-		qDebug() << "Error: cannot parse.";
+		qDebug() << "Unable to parse data.";
+		mSocket->write("NACK");
 		return;
 	}
 
-	mSocket->write(Data);
+	mSocket->write("ACK");
 }
 
 void TcpHandler::disconnected()

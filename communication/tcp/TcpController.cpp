@@ -1,5 +1,5 @@
-#include "TcpController.h"
-#include "TcpHandler.h"
+#include "communication/tcp/TcpController.h"
+#include "communication/tcp/TcpHandler.h"
 #include <QTimer>
 
 #define TCP_PORT 2222

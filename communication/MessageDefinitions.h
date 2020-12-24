@@ -18,7 +18,7 @@ enum MessageStructure : uint8_t {
 enum MessageType : uint8_t {
 	NONE = 0,
 	RAW_MESSAGE_TYPE,
-	DISCOVER_MESSAGE_TYPE,
+	NODE_INFO_MESSAGE_TYPE,
 	RFID_READER_MESSAGE_TYPE,
 	MESSAGE_TYPE_COUNT
 };

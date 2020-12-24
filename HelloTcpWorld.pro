@@ -16,12 +16,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-	MessageParser.cpp \
-        TcpController.cpp \
-        TcpHandler.cpp \
-	Message.cpp \
-	RfidReaderMessage.cpp \
-        main.cpp
+    dataobjects/IDataObject.cpp \
+    dataobjects/NodeInfoDataObject.cpp \
+    dataobjects/RfidReaderDataObject.cpp \
+    communication/tcp/TcpController.cpp \
+    communication/tcp/TcpHandler.cpp \
+    communication/MessageParser.cpp \
+    main.cpp \
+    utils/Utils.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -29,9 +31,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    MessageDefinitions.h \
-    MessageParser.h \
-    TcpController.h \
-    TcpHandler.h \
-    Message.h \
-    RfidReaderMessage.h
+    dataobjects/IDataObject.h \
+    dataobjects/NodeInfoDataObject.h \
+    dataobjects/RfidReaderDataObject.h \
+    communication/MessageDefinitions.h \
+    communication/MessageParser.h \
+    communication/tcp/TcpController.h \
+    communication/tcp/TcpHandler.h \
+    utils/Utils.h

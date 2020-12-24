@@ -1,8 +1,9 @@
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef IDATAOBJECT_H
+#define IDATAOBJECT_H
 
 #include <stdint.h>
-#include <MessageDefinitions.h>
+#include <communication/MessageDefinitions.h>
+#include <QObject>
 
 #define SYNC_BYTE_CONSTANT 0x7E
 
@@ -11,11 +12,12 @@ struct RawPacket {
 	uint8_t mSize;
 };
 
-class Message
+class IDataObject : public QObject
 {
+	Q_OBJECT
 public:
-	Message();
-	~Message();
+	IDataObject(QObject * aParent = nullptr);
+	~IDataObject();
 
 	bool serialize();
 	virtual bool onSerialize() = 0;
@@ -28,12 +30,10 @@ protected:
 	uint8_t* mPayload;
 
 private:
-	uint16_t crc16(const uint8_t* data_p, uint8_t length);
-
 	uint8_t mSyncByte;
 	MessageType mType;
 	uint16_t mCrc;
 	RawPacket mSerialized;
 };
 
-#endif // MESSAGE_H
+#endif // IDATAOBJECT_H

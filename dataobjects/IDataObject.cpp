@@ -1,22 +1,24 @@
-#include <Message.h>
+#include <dataobjects/IDataObject.h>
+#include <utils/Utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
 
-Message::Message() :
+IDataObject::IDataObject(QObject * aParent) :
+	QObject(aParent),
 	mPayloadSize(0),
 	mPayload(nullptr)
 {
 
 }
 
-Message::~Message()
+IDataObject::~IDataObject()
 {
 	mPayloadSize = 0;
 	mPayload = nullptr;
 }
 
-bool Message::serialize()
+bool IDataObject::serialize()
 {
 	if (!onSerialize())
 	{
@@ -35,7 +37,7 @@ bool Message::serialize()
 	memcpy(&mSerialized.mData[4], mPayload, mPayloadSize);
 
 	// Calculate CRC-16, and fill in at the message.
-	mCrc = crc16(mSerialized.mData, mSerialized.mSize - sizeof(mCrc));
+	mCrc = Utils::crc16(mSerialized.mData, mSerialized.mSize - sizeof(mCrc));
 
 	mSerialized.mData[MessageStructure::CRC_BYTE_1_FIELD + mPayloadSize] = (mCrc & 0xFF);
 	mSerialized.mData[MessageStructure::CRC_BYTE_2_FIELD + mPayloadSize] = (mCrc >> 8);
@@ -43,7 +45,7 @@ bool Message::serialize()
 	return true;
 }
 
-bool Message::deserialize(uint8_t * aData, uint8_t aSize)
+bool IDataObject::deserialize(uint8_t * aData, uint8_t aSize)
 {
 	if (onDeserialize(aData, aSize))
 	{
@@ -51,18 +53,5 @@ bool Message::deserialize(uint8_t * aData, uint8_t aSize)
 	}
 
 	return true;
-}
-
-uint16_t Message::crc16(const uint8_t* data_p, uint8_t length)
-{
-	uint8_t x;
-	uint16_t crc = 0xFFFF;
-
-	while (length--){
-		x = crc >> 8 ^ *data_p++;
-		x ^= x>>4;
-		crc = (crc << 8) ^ ((uint16_t)(x << 12)) ^ ((uint16_t)(x <<5)) ^ ((uint16_t)x);
-	}
-	return crc;
 }
 
