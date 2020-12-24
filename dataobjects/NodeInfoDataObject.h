@@ -7,6 +7,7 @@ class NodeInfoDataObject : public IDataObject
 {
 	Q_OBJECT
 	Q_PROPERTY(QString qMacAddress READ getMacAddressString NOTIFY macAddressChanged)
+	Q_PROPERTY(bool qReadyForUse READ getReadyForUse NOTIFY macAddressChanged)
 
 	public:
 		enum MacAddressField {
@@ -27,6 +28,7 @@ class NodeInfoDataObject : public IDataObject
 		void setMacAddress(const MacAddressField aField, const uint8_t aValue);
 		uint8_t * getMacAddress();
 		QString getMacAddressString();
+		bool getReadyForUse();
 
 	signals:
 		void macAddressChanged();

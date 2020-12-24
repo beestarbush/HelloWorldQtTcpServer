@@ -35,7 +35,7 @@ void TcpHandler::run()
 
 	// We'll have multiple clients, we want to know which is which
 	qDebug() << mSocketDescriptor << " Client connected";
-	mIsConnected = true;
+	setIsConnected(true);
 
 	// make this thread a loop,
 	// thread will stay alive so that signal/slot to function properly
@@ -56,6 +56,11 @@ void TcpHandler::setIsConnected(bool aIsConnected)
 		mIsConnected = aIsConnected;
 		emit isConnectedChanged();
 	}
+}
+
+int TcpHandler::getSocketDescriptor()
+{
+	return mSocketDescriptor;
 }
 
 void TcpHandler::readyRead()
@@ -81,7 +86,7 @@ void TcpHandler::disconnected()
 	qDebug() << mSocketDescriptor << " Disconnected";
 
 	mSocket->deleteLater();
-	mIsConnected = false;
+	setIsConnected(false);
 }
 
 

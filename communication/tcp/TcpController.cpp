@@ -35,7 +35,7 @@ QVariantList TcpController::getConnectionList()
 
 void TcpController::checkConnections()
 {
-	for(QVariantList::iterator lIterator = mConnectionList.begin(); lIterator != mConnectionList.end(); ++lIterator)
+	for(QVariantList::iterator lIterator = mConnectionList.begin(); lIterator != mConnectionList.end(); lIterator++)
 	{
 		auto lObject = qvariant_cast<QObject *>(*lIterator);
 		auto lHandler = dynamic_cast<TcpHandler*>(lObject);
@@ -45,6 +45,7 @@ void TcpController::checkConnections()
 		{
 			mConnectionList.erase(lIterator);
 			emit connectionListChanged();
+			return;
 		}
 	}
 }

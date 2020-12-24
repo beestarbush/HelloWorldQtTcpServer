@@ -2,6 +2,7 @@
 #define TCPCONTROLLER_H
 
 #include <QTcpServer>
+#include <QVariantList>
 
 class TcpHandler;
 class QTimer;

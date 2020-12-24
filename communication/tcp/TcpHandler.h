@@ -11,6 +11,7 @@ class TcpHandler : public QThread
 {
 		Q_OBJECT
 		Q_PROPERTY(bool qIsConnected READ getIsConnected NOTIFY isConnectedChanged)
+		Q_PROPERTY(int qSocketDescriptor READ getSocketDescriptor NOTIFY socketDescriptorChanged)
 		Q_PROPERTY(NodeInfoDataObject * qNodeInfoData MEMBER mNodeInfoData CONSTANT)
 		Q_PROPERTY(RfidReaderDataObject * qRfidReaderData MEMBER mRfidReaderData CONSTANT)
 
@@ -21,6 +22,8 @@ class TcpHandler : public QThread
 		bool getIsConnected() const;
 		void setIsConnected(bool aIsConnected);
 
+		int getSocketDescriptor();
+
 	public slots:
 		void readyRead();
 		void disconnected();
@@ -28,6 +31,7 @@ class TcpHandler : public QThread
 	signals:
 		void error(QTcpSocket::SocketError aError);
 		void isConnectedChanged();
+		void socketDescriptorChanged();
 
 	private:
 		MessageParser mParser;

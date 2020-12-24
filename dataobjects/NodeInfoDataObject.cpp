@@ -4,7 +4,6 @@ NodeInfoDataObject::NodeInfoDataObject() :
 	IDataObject(),
 	mMacAddress()
 {
-
 }
 
 bool NodeInfoDataObject::onSerialize()
@@ -52,4 +51,15 @@ QString NodeInfoDataObject::getMacAddressString()
 		lMacAddress += QString::number(lPart, 16);
 	}
 	return lMacAddress;
+}
+
+bool NodeInfoDataObject::getReadyForUse()
+{
+	uint8_t lEmptyMac[MAC_ADDRESS_OCTET_COUNT] = { 0 };
+	if (memcmp(mMacAddress, lEmptyMac, MAC_ADDRESS_OCTET_COUNT) == 0)
+	{
+		return false;
+	}
+
+	return true;
 }
