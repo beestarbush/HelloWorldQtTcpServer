@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include <MessageParser.h>
 
 class TcpHandler : public QThread
 {
@@ -29,6 +30,7 @@ class TcpHandler : public QThread
 		void uidChanged();
 
 	private:
+		MessageParser mParser;
 		QTcpSocket * mSocket;
 		int mSocketDescriptor;
 		bool mIsConnected;

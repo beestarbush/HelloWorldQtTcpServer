@@ -1,8 +1,10 @@
 #include "TcpHandler.h"
+#include <RfidReaderMessage.h>
 #include <QDebug>
 
 TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
 	QThread(aParent),
+	mParser(),
 	mSocketDescriptor(aId),
 	mIsConnected(false),
 	mUid("<UNKNOWN>")
@@ -75,6 +77,12 @@ void TcpHandler::readyRead()
 
 	// will write on server side window
 	qDebug() << mSocketDescriptor << " Data in: " << Data;
+
+	if (!mParser.parse(((uint8_t*)Data.data()), Data.count()))
+	{
+		qDebug() << "Error: cannot parse.";
+		return;
+	}
 
 	mSocket->write(Data);
 }
