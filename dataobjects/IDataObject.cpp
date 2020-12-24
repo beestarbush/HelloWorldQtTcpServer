@@ -47,7 +47,7 @@ bool IDataObject::serialize()
 
 bool IDataObject::deserialize(uint8_t * aData, uint8_t aSize)
 {
-	if (onDeserialize(aData, aSize))
+	if (!onDeserialize(aData, aSize))
 	{
 		return false;
 	}

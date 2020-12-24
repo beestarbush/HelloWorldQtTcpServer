@@ -44,10 +44,7 @@ bool MessageParser::parse(uint8_t *aData, uint8_t aSize)
 
 	uint16_t lPayloadSize = ((uint16_t)aData[MessageStructure::PAYLOAD_SIZE_BYTE_2_FIELD] << 8) | aData[MessageStructure::PAYLOAD_SIZE_BYTE_1_FIELD];
 	uint16_t lReceivedCrc = ((uint16_t)aData[MessageStructure::CRC_BYTE_2_FIELD + lPayloadSize] << 8) | aData[MessageStructure::CRC_BYTE_1_FIELD + lPayloadSize];
-
-	uint8_t * lData = (uint8_t *) malloc(lSize);
-	memcpy(lData, aData, aSize);
-	uint16_t lCalculatedCrc = Utils::crc16(lData, lSize - sizeof(uint16_t));
+	uint16_t lCalculatedCrc = Utils::crc16(aData, lSize - sizeof(uint16_t));
 
 	if (lReceivedCrc != lCalculatedCrc)
 	{
@@ -61,6 +58,8 @@ bool MessageParser::parse(uint8_t *aData, uint8_t aSize)
 		qDebug() << "No object registered for this datatype.";
 		return false;
 	}
+	uint8_t * lData = (uint8_t *) malloc(lPayloadSize);
+	memcpy(lData, &aData[MessageStructure::CRC_BYTE_1_FIELD], lPayloadSize);
 	if (!mDataObjects[lType]->deserialize(lData, lPayloadSize))
 	{
 		qDebug() << "Failed to deserialize dataobject for type: " << lType;

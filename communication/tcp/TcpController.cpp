@@ -19,7 +19,7 @@ void TcpController::start()
 	mCheckConnectionTimer->setSingleShot(false);
 	mCheckConnectionTimer->start();
 
-	if (!listen(QHostAddress::Any, TCP_PORT))
+	if (!listen(QHostAddress::AnyIPv4, TCP_PORT))
 	{
 		qDebug() << "Could not start server!";
 		return;
