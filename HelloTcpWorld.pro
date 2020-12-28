@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ApplicationLogic.cpp \
+    database/DatabaseController.cpp \
     dataobjects/IDataObject.cpp \
     dataobjects/NodeInfoDataObject.cpp \
     dataobjects/RfidReaderDataObject.cpp \
@@ -34,6 +35,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ApplicationLogic.h \
     ReaderDataCallback.h \
+    database/DatabaseController.h \
+    database/DatabaseDefinitions.h \
     dataobjects/IDataObject.h \
     dataobjects/NodeInfoDataObject.h \
     dataobjects/RfidReaderDataObject.h \

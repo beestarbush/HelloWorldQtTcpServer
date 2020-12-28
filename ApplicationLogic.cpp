@@ -13,18 +13,11 @@ ApplicationLogic::ApplicationLogic() :
 
 ApplicationLogic::~ApplicationLogic()
 {
-	qDebug() << "closing database";
-	mDatabase.close();
-	QSqlDatabase::removeDatabase("connection");
 }
 
 bool ApplicationLogic::setup()
 {
-	// Open database.
-	mDatabase = QSqlDatabase::addDatabase("QSQLITE", "connection");
-	mDatabase.setDatabaseName("/home/bijstr/workspace/HelloTcpWorld/database.db");
-
-	if (!mDatabase.open())
+	if (!mDatabaseController.open())
 	{
 		qDebug() << "Failed to open database.";
 		return false;
@@ -60,19 +53,20 @@ void ApplicationLogic::onProcessData()
 	qDebug() << "MAC: " << lMacAddress;
 	qDebug() << "CID: " << lCardId;
 
-	QSqlQuery lSelectQuery(mDatabase);
-	lSelectQuery.prepare("SELECT uid FROM ReaderDefinitions WHERE mac_address=:macaddress");
-	lSelectQuery.bindValue(":macaddress", lMacAddress);
-	if (!lSelectQuery.exec())
+	uint32_t lReaderId = 0;
+	if (!mDatabaseController.queryReaderId(lMacAddress, lReaderId))
 	{
-		qDebug() << "Unable to execute query.";
-		return;
-	}
-	if (!lSelectQuery.next())
-	{
-		qDebug() << "Unable to retrieve key from query.";
+		qDebug() << "Failed to query reader ID.";
 		return;
 	}
 
-	qDebug() << "Reader ID: " << lSelectQuery.value("uid").toString();
+	uint32_t lCardUid = 0;
+	if (!mDatabaseController.queryCardId(lCardId, lCardUid))
+	{
+		qDebug() << "Failed to query card UID.";
+		return;
+	}
+
+	qDebug() << "Reader ID:" << lReaderId;
+	qDebug() << "Card UID: " << lCardUid;
 }

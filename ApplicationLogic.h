@@ -4,7 +4,7 @@
 #include <ReaderDataCallback.h>
 #include <QMutex>
 #include <QQueue>
-#include <QtSql/QSqlDatabase>
+#include <database/DatabaseController.h>
 
 class ApplicationLogic : public ReaderDataCallback
 {
@@ -27,7 +27,7 @@ class ApplicationLogic : public ReaderDataCallback
 		QQueue<QString> mCardIdsQueue;
 		QMutex mMutex;
 
-		QSqlDatabase mDatabase;
+		DatabaseController mDatabaseController;
 
 };
 

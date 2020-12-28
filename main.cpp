@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	//TcpController lController(&lLogic);
 	//lController.start();
 
-	lLogic.onReaderDataAvailable("AABBCCDD", "123456");
+	lLogic.onReaderDataAvailable("AABBCCDD", "1020304");
 
 	return a.exec();
 }
