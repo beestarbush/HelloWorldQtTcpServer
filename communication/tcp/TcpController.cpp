@@ -4,10 +4,11 @@
 
 #define TCP_PORT 2222
 
-TcpController::TcpController(QObject * aParent) :
+TcpController::TcpController(ReaderDataCallback * aCallback, QObject * aParent) :
 	QTcpServer(aParent),
 	mCheckConnectionTimer(new QTimer()),
-	mConnectionList()
+	mConnectionList(),
+	mCallback(aCallback)
 {
 
 }
@@ -55,6 +56,7 @@ void TcpController::incomingConnection(qintptr aSocketDescriptor)
 	qDebug() << aSocketDescriptor << " Connecting...";
 
 	TcpHandler * lHandler = new TcpHandler(aSocketDescriptor, this);
+	lHandler->registerReaderDataCallback(mCallback);
 	connect(lHandler, SIGNAL(finished()), lHandler, SLOT(deleteLater()));
 	lHandler->start();
 

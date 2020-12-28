@@ -8,7 +8,8 @@ TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
 	mSocketDescriptor(aId),
 	mIsConnected(false),
 	mNodeInfoData(new NodeInfoDataObject),
-	mRfidReaderData(new RfidReaderDataObject)
+	mRfidReaderData(new RfidReaderDataObject),
+	mCallback(nullptr)
 {
 	mParser.registerDataObject(MessageType::NODE_INFO_MESSAGE_TYPE, mNodeInfoData);
 	mParser.registerDataObject(MessageType::RFID_READER_MESSAGE_TYPE, mRfidReaderData);
@@ -42,6 +43,11 @@ void TcpHandler::run()
 	// not dropped out in the middle when thread dies
 
 	exec();
+}
+
+void TcpHandler::registerReaderDataCallback(ReaderDataCallback * aCallback)
+{
+	mCallback = aCallback;
 }
 
 bool TcpHandler::getIsConnected() const

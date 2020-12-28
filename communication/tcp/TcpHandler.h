@@ -7,6 +7,8 @@
 #include <dataobjects/RfidReaderDataObject.h>
 #include <dataobjects/NodeInfoDataObject.h>
 
+class ReaderDataCallback;
+
 class TcpHandler : public QThread
 {
 		Q_OBJECT
@@ -18,6 +20,8 @@ class TcpHandler : public QThread
 	public:
 		TcpHandler(unsigned short aId, QObject * aParent = nullptr);
 		void run() override;
+
+		void registerReaderDataCallback(ReaderDataCallback * aCallback);
 
 		bool getIsConnected() const;
 		void setIsConnected(bool aIsConnected);
@@ -41,6 +45,8 @@ class TcpHandler : public QThread
 
 		NodeInfoDataObject * mNodeInfoData;
 		RfidReaderDataObject * mRfidReaderData;
+
+		ReaderDataCallback * mCallback;
 };
 
 #endif // TCPHANDLER_H

@@ -6,13 +6,14 @@
 
 class TcpHandler;
 class QTimer;
+class ReaderDataCallback;
 
 class TcpController : public QTcpServer
 {
 		Q_OBJECT
 		Q_PROPERTY(QVariantList qConnectionList READ getConnectionList NOTIFY connectionListChanged)
 	public:
-		TcpController(QObject * aParent = nullptr);
+		TcpController(ReaderDataCallback * aCallback, QObject * aParent = nullptr);
 		void start();
 
 		QVariantList getConnectionList();
@@ -29,6 +30,7 @@ class TcpController : public QTcpServer
 	private:
 		QTimer * mCheckConnectionTimer;
 		QVariantList mConnectionList;
+		ReaderDataCallback * mCallback;
 };
 
 #endif // TCPCONTROLLER_H
