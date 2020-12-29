@@ -6,21 +6,26 @@
 #include <QQueue>
 #include <database/DatabaseController.h>
 
+class ApplicationData;
+
 class ApplicationLogic : public ReaderDataCallback
 {
-		Q_OBJECT
+	Q_OBJECT
+
 	public:
-		explicit ApplicationLogic();
-		virtual ~ApplicationLogic();
+		explicit ApplicationLogic(ApplicationData * aData);
+		virtual ~ApplicationLogic() override = default;
 
 		bool setup();
 
 	signals:
 		void processData();
+		void combinationsChanged();
 
 	public slots:
 		void onReaderDataAvailable(QString aMacAddress, QString aCardId) override;
 		void onProcessData();
+		void onCombinationsChanged();
 
 	private:
 		QQueue<QString> mMacAddressesQueue;
@@ -28,7 +33,9 @@ class ApplicationLogic : public ReaderDataCallback
 		QMutex mMutex;
 
 		DatabaseController mDatabaseController;
+		ApplicationData * mApplicationData;
 
+		bool determineActiveCombination();
 };
 
 #endif // APPLICATIONLOGIC_H

@@ -10,25 +10,35 @@ class DatabaseController : public QObject
 	Q_OBJECT
 	public:
 		explicit DatabaseController(QObject *parent = nullptr);
+		virtual ~DatabaseController() override = default;
 
 		bool open();
+		bool load();
 		bool close();
 
-		bool queryReaderId(QString aMacAddress, uint32_t & aReaderId);
-		bool queryCardId(QString aCardId, uint32_t & aCardUid);
+		bool getReaderIdByMacAddress(QString aMacAddress, uint32_t & aReaderId);
+		bool getCardUidByCardId(QString aCardId, uint32_t & aCardUid);
+		bool getVersionByComponent(QString aComponent, uint32_t & aVersion);
+		bool getFilenameByCombinationId(uint32_t aCombinationId, QString & aFilename);
 
-
-	signals:
+		ReaderDefinitionList * getReaderDefinitionList();
+		CardDefinitionList * getCardDefinitionList();
+		FileDefinitionList * getFileDefinitionList();
+		CombinationMatrix * getCombinationMatrix();
 
 	private:
 		QSqlDatabase mDatabase;
+		VersionDefinitionList mVersionDefinitionList;
 		ReaderDefinitionList mReaderDefinitionList;
 		CardDefinitionList mCardDefinitionList;
 		FileDefinitionList mFileDefinitionList;
+		CombinationMatrix mCombinationMatrix;
 
+		bool loadVersionDefinitions();
 		bool loadReaderDefinitions();
 		bool loadCardDefinitions();
 		bool loadFileDefinitions();
+		bool loadCombinationMatrix();
 
 };
 

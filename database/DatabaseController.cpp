@@ -2,16 +2,27 @@
 #include <QSqlQuery>
 #include <QDebug>
 
-DatabaseController::DatabaseController(QObject *parent) : QObject(parent)
-{
+#define DATABASE_VERSION	(1)
+#define DATABASE_LOCATION	("/home/bijstr/workspace/HelloTcpWorld/database.db")
+//#define DATABASE_LOCATION	("/home/randy/Development/C++/HelloWorldQtTcpServer/database.db")
 
+
+DatabaseController::DatabaseController(QObject *parent) :
+	QObject(parent),
+	mDatabase(),
+	mVersionDefinitionList(),
+	mReaderDefinitionList(),
+	mCardDefinitionList(),
+	mFileDefinitionList(),
+	mCombinationMatrix()
+{
 }
 
 bool DatabaseController::open()
 {
 	// Open database.
 	mDatabase = QSqlDatabase::addDatabase("QSQLITE", "connection");
-	mDatabase.setDatabaseName("/home/randy/Development/C++/HelloWorldQtTcpServer/database.db");
+	mDatabase.setDatabaseName(DATABASE_LOCATION);
 
 	if (!mDatabase.open())
 	{
@@ -19,13 +30,31 @@ bool DatabaseController::open()
 		return false;
 	}
 
-	if (!loadReaderDefinitions() ||
-		!loadCardDefinitions() ||
-		!loadFileDefinitions())
+	uint32_t lDatabaseVersion = 0;
+	if (!loadVersionDefinitions() ||
+		!getVersionByComponent("database", lDatabaseVersion))
 	{
 		return false;
 	}
 
+	if (lDatabaseVersion != DATABASE_VERSION)
+	{
+		qDebug() << "Incorrect database version.";
+		return false;
+	}
+
+	return true;
+}
+
+bool DatabaseController::load()
+{
+	if (!loadReaderDefinitions() ||
+		!loadCardDefinitions() ||
+		!loadFileDefinitions() ||
+		!loadCombinationMatrix())
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -36,14 +65,15 @@ bool DatabaseController::close()
 		return false;
 	}
 
-	qDebug() << "closing database";
 	mDatabase.close();
+
+	mDatabase = QSqlDatabase::database();
 	QSqlDatabase::removeDatabase("connection");
 
 	return true;
 }
 
-bool DatabaseController::queryReaderId(QString aMacAddress, uint32_t &aReaderId)
+bool DatabaseController::getReaderIdByMacAddress(QString aMacAddress, uint32_t &aReaderId)
 {
 	for (auto lDefinition : mReaderDefinitionList)
 	{
@@ -57,7 +87,7 @@ bool DatabaseController::queryReaderId(QString aMacAddress, uint32_t &aReaderId)
 	return false;
 }
 
-bool DatabaseController::queryCardId(QString aCardId, uint32_t &aCardUid)
+bool DatabaseController::getCardUidByCardId(QString aCardId, uint32_t &aCardUid)
 {
 	for (auto lDefinition : mCardDefinitionList)
 	{
@@ -69,6 +99,80 @@ bool DatabaseController::queryCardId(QString aCardId, uint32_t &aCardUid)
 	}
 
 	return false;
+}
+
+bool DatabaseController::getVersionByComponent(QString aComponent, uint32_t & aVersion)
+{
+	for (auto lDefinition : mVersionDefinitionList)
+	{
+		if (lDefinition.mComponent.compare(aComponent) == 0)
+		{
+			aVersion = lDefinition.mVersion;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool DatabaseController::getFilenameByCombinationId(uint32_t aCombinationId, QString & aFilename)
+{
+	for (auto lDefinition : mFileDefinitionList)
+	{
+		if (lDefinition.mCombinationId == aCombinationId)
+		{
+			aFilename = lDefinition.mFilename;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+ReaderDefinitionList * DatabaseController::getReaderDefinitionList()
+{
+	return &mReaderDefinitionList;
+}
+
+CardDefinitionList * DatabaseController::getCardDefinitionList()
+{
+	return &mCardDefinitionList;
+}
+
+FileDefinitionList * DatabaseController::getFileDefinitionList()
+{
+	return &mFileDefinitionList;
+}
+
+CombinationMatrix * DatabaseController::getCombinationMatrix()
+{
+	return &mCombinationMatrix;
+}
+
+bool DatabaseController::loadVersionDefinitions()
+{
+	QSqlQuery lSelectQuery(mDatabase);
+	lSelectQuery.prepare("SELECT uid, component, version FROM VersionDefinitions");
+	if (!lSelectQuery.exec())
+	{
+		qDebug() << "Unable to execute query.";
+		return false;
+	}
+	while (lSelectQuery.next())
+	{
+		VersionDefinition lDefinition = { lSelectQuery.value("uid").toUInt(),
+										  lSelectQuery.value("component").toString(),
+										  lSelectQuery.value("version").toUInt() };
+		mVersionDefinitionList.push_back(lDefinition);
+	}
+
+	if (mVersionDefinitionList.empty())
+	{
+		qDebug() << "Failed to load VersionDefinitions from database.";
+		return false;
+	}
+
+	return true;
 }
 
 bool DatabaseController::loadReaderDefinitions()
@@ -143,6 +247,37 @@ bool DatabaseController::loadFileDefinitions()
 	if (mFileDefinitionList.empty())
 	{
 		qDebug() << "Failed to load FileDefinitions from database.";
+		return false;
+	}
+
+	return true;
+}
+
+bool DatabaseController::loadCombinationMatrix()
+{
+	QSqlQuery lSelectQuery(mDatabase);
+	lSelectQuery.prepare("SELECT uid, combination_id, reader_uid, card_uid FROM CombinationMatrix");
+	if (!lSelectQuery.exec())
+	{
+		qDebug() << "Unable to execute query.";
+		return false;
+	}
+	while (lSelectQuery.next())
+	{
+		uint32_t lCombinationId = lSelectQuery.value("combination_id").toUInt();
+		if (mCombinationMatrix.find(lCombinationId) == mCombinationMatrix.end())
+		{
+			mCombinationMatrix.insert(std::pair<uint32_t, std::vector<Combination>*>(lCombinationId, new std::vector<Combination>));
+		}
+
+		Combination lCombination =	 {  lSelectQuery.value("reader_uid").toUInt(),
+										lSelectQuery.value("card_uid").toUInt() };
+		mCombinationMatrix[lCombinationId]->push_back(lCombination);
+	}
+
+	if (mCombinationMatrix.empty())
+	{
+		qDebug() << "Failed to load CombinationMatrix from database.";
 		return false;
 	}
 

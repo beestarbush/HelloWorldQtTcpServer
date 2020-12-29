@@ -4,6 +4,15 @@
 #include <stdint.h>
 #include <QString>
 #include <vector>
+#include <map>
+
+typedef struct  {
+	uint32_t mUid;
+	QString mComponent;
+	uint32_t mVersion;
+} VersionDefinition;
+
+typedef std::vector<VersionDefinition> VersionDefinitionList;
 
 typedef struct  {
 	uint32_t mUid;
@@ -28,6 +37,13 @@ typedef struct  {
 } FileDefinition;
 
 typedef std::vector<FileDefinition> FileDefinitionList;
+
+typedef struct {
+	uint32_t mReaderUid;
+	uint32_t mCardUid;
+} Combination;
+
+typedef std::map<uint32_t, std::vector<Combination>*> CombinationMatrix;
 
 
 #endif // DATABASEDEFINITIONS_H

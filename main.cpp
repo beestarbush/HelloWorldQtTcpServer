@@ -1,17 +1,19 @@
 #include <QCoreApplication>
 #include <communication/tcp/TcpController.h>
 #include <ApplicationLogic.h>
+#include <ApplicationData.h>
 
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 
-	ApplicationLogic lLogic;
+	ApplicationData lData;
+	ApplicationLogic lLogic(&lData);
 	lLogic.setup();
-	//TcpController lController(&lLogic);
-	//lController.start();
 
-	lLogic.onReaderDataAvailable("AABBCCDD", "1020304");
+	TcpController lController;
+	lController.registerReaderDataCallback(&lLogic);
+	lController.start();
 
 	return a.exec();
 }

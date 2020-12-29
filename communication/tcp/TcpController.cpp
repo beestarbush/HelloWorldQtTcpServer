@@ -4,13 +4,17 @@
 
 #define TCP_PORT 2222
 
-TcpController::TcpController(ReaderDataCallback * aCallback, QObject * aParent) :
+TcpController::TcpController(QObject * aParent) :
 	QTcpServer(aParent),
 	mCheckConnectionTimer(new QTimer()),
 	mConnectionList(),
-	mCallback(aCallback)
+	mCallback(nullptr)
 {
+}
 
+void TcpController::registerReaderDataCallback(ReaderDataCallback * aCallback)
+{
+	mCallback = aCallback;
 }
 
 void TcpController::start()

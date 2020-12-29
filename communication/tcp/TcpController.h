@@ -13,7 +13,9 @@ class TcpController : public QTcpServer
 		Q_OBJECT
 		Q_PROPERTY(QVariantList qConnectionList READ getConnectionList NOTIFY connectionListChanged)
 	public:
-		TcpController(ReaderDataCallback * aCallback, QObject * aParent = nullptr);
+		TcpController(QObject * aParent = nullptr);
+
+		void registerReaderDataCallback(ReaderDataCallback * aCallback);
 		void start();
 
 		QVariantList getConnectionList();
