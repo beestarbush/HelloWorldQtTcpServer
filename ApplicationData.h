@@ -9,7 +9,7 @@ typedef std::vector<Combination> Combinations;
 class ApplicationData : public QObject
 {
 	Q_OBJECT
-	Q_PROPERTY(uint32_t qActiveCombinationId READ getActiveCombinationId WRITE setActiveCombinationId NOTIFY activeCombinationIdChanged)
+	Q_PROPERTY(unsigned int qActiveCombinationId READ getActiveCombinationId WRITE setActiveCombinationId NOTIFY activeCombinationIdChanged)
 	Q_PROPERTY(QString qActiveFilename READ getActiveFilename WRITE setActiveFilename NOTIFY activeFilenameChanged)
 
 
