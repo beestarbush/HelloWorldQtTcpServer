@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>MainScreen.qml</file>
+        <file>ControlScreen.qml</file>
+        <file>ImageScreen.qml</file>
     </qresource>
 </RCC>

@@ -9,54 +9,19 @@ Window {
 	height: 640
 	title: qsTr("Helloapp")
 
-	GridLayout {
-		id: headerLayout
-		columns: 3
-		anchors.left: parent.left
-		anchors.right: parent.right
-		anchors.top: parent.top
+	SwipeView {
+		id: swipeView
+		anchors.fill: parent
+		currentIndex: 0
 
-		Text {
-			text: "Socket ID:"
+		ControlScreen {
+			width: 600
+			height: 400
 		}
-		Text {
-			text:  "MAC-address:"
-		}
-		Text {
-			text:  "Ready for use:"
-		}
-	}
 
-	ListView {
-		id: nodeList
-		anchors.left: parent.left
-		anchors.right: parent.right
-		anchors.top: headerLayout.bottom
-		anchors.bottom: parent.bottom
-
-		clip: true
-		flickableDirection: Flickable.AutoFlickIfNeeded
-		model: qController.qConnectionList
-
-		delegate: GridLayout {
-			columns: 3
-			anchors.left: parent.left
-			anchors.right: parent.right
-
-			Text {
-				text: modelData.qSocketDescriptor
-				elide: Text.ElideRight
-			}
-
-			Text {
-				text: modelData.qNodeInfoData.qMacAddress
-				elide: Text.ElideRight
-			}
-
-			CheckBox {
-				checked: modelData.qNodeInfoData.qReadyForUse
-				enabled: false
-			}
+		ImageScreen {
+			width: 600
+			height: 400
 		}
 	}
 }

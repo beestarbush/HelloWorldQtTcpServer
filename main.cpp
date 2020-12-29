@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
 	TcpController lController;
 	lEngine.rootContext()->setContextProperty("qController", &lController);
+	lEngine.rootContext()->setContextProperty("qApplicationData", &lData);
 	lEngine.load(url);
 
 	lController.registerReaderDataCallback(&lLogic);
