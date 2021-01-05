@@ -12,7 +12,7 @@ Window {
 	SwipeView {
 		id: swipeView
 		anchors.fill: parent
-		currentIndex: 0
+		currentIndex: 1
 
 		ControlScreen {
 			width: 600
