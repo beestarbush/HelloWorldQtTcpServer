@@ -5,7 +5,7 @@ ApplicationData::ApplicationData(QObject *parent) :
 	QObject(parent),
 	mCombinations(),
 	mActiveCombinationId(0),
-	mActiveFilename("empty.jpg"),
+	mActiveFilename("empty.png"),
 	mUnknownIds()
 {
 
