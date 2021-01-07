@@ -15,13 +15,9 @@ Window {
 		currentIndex: 1
 
 		ControlScreen {
-			width: 600
-			height: 400
 		}
 
 		ImageScreen {
-			width: 600
-			height: 400
 		}
 	}
 }

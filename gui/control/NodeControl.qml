@@ -3,35 +3,35 @@ import QtQuick.Window 2.10
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 
-Item {
+ColumnLayout {
+	Layout.fillWidth: true
+
 	GridLayout {
 		id: headerLayout
 		columns: 3
-		anchors.top: parent.top
-		anchors.topMargin: 50
-		anchors.left: parent.left
-		anchors.right: parent.right
+		Layout.fillWidth: true
 
 		Text {
 			text: "Socket ID:"
 			font.bold: true
+			Layout.fillWidth: true
 		}
 		Text {
 			text:  "MAC-address:"
 			font.bold: true
+			Layout.fillWidth: true
 		}
 		Text {
 			text:  "Ready for use:"
 			font.bold: true
+			Layout.fillWidth: true
 		}
 	}
 
 	ListView {
 		id: nodeList
-		anchors.left: parent.left
-		anchors.right: parent.right
-		anchors.top: headerLayout.bottom
-		anchors.bottom: parent.bottom
+		Layout.fillWidth: true
+		Layout.fillHeight: true
 
 		clip: true
 		flickableDirection: Flickable.AutoFlickIfNeeded
@@ -45,18 +45,20 @@ Item {
 			Text {
 				text: modelData.qSocketDescriptor
 				elide: Text.ElideRight
+				Layout.fillWidth: true
 			}
 
 			Text {
 				text: modelData.qNodeInfoData.qMacAddress
 				elide: Text.ElideRight
+				Layout.fillWidth: true
 			}
 
 			CheckBox {
 				checked: modelData.qNodeInfoData.qReadyForUse
 				enabled: false
+				Layout.fillWidth: true
 			}
 		}
 	}
 }
-

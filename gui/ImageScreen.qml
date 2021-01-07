@@ -3,13 +3,14 @@ import QtQuick.Window 2.10
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 
-Page {
+ColumnLayout {
+	Layout.fillWidth: true
+	Layout.fillHeight: true
+
 	Image {
 		id: image
-		anchors.left: parent.left
-		anchors.right: parent.right
-		anchors.top: parent.top
-		anchors.bottom: parent.bottom
+		Layout.fillWidth: true
+		Layout.fillHeight: true
 		source: "file:files/" + qApplicationData.qActiveFilename
 		fillMode: Image.PreserveAspectCrop
 		clip: true
@@ -29,9 +30,7 @@ Page {
 	}
 	Text {
 		id: errorText
-		text: "File not found!"
+		text: qsTr("File not found!")
 		visible: true
-		anchors.centerIn: parent
 	}
 }
-

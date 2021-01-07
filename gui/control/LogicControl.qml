@@ -3,14 +3,13 @@ import QtQuick.Window 2.10
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 
-Item {
+ColumnLayout {
+	Layout.fillWidth: true
+
 	GridLayout {
 		id: infoLayout
 		columns: 2
-		anchors.top: parent.top
-		anchors.topMargin: 50
-		anchors.left: parent.left
-		anchors.right: parent.right
+		Layout.fillWidth: true
 
 		Text {
 			text: qsTr("Active combination:")
@@ -25,6 +24,30 @@ Item {
 		}
 		Text {
 			text: qApplicationData.qActiveFilename
+		}
+	}
+
+	GridLayout {
+		Layout.topMargin: 20
+		Layout.fillWidth: true
+		Layout.fillHeight: true
+		columns: 1
+
+		Text {
+			text: qsTr("Unknown IDs")
+			font.bold: true
+			Layout.fillWidth: true
+		}
+
+		Button {
+			text: qsTr("Clear");
+			onClicked: qApplicationData.qUnknownIds = "";
+			Layout.fillWidth: true
+		}
+
+		TextArea {
+			Layout.fillHeight: true
+			text: qApplicationData.qUnknownIds
 		}
 	}
 }

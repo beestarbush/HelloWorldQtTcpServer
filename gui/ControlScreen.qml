@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import "control"
 
-Page {
-	header: Label {
+ColumnLayout {
+	Label {
 		text: qsTr("Control screen")
 		font.pixelSize: Qt.application.font.pixelSize * 2
 		padding: 10
@@ -13,7 +13,7 @@ Page {
 
 	TabBar {
 		id: tabBar
-		width: parent.width
+		Layout.fillWidth: true
 		TabButton {
 			text: qsTr("Nodes")
 		}
@@ -23,8 +23,8 @@ Page {
 	}
 
 	StackLayout {
-		width: parent.width
 		currentIndex: tabBar.currentIndex
+		Layout.fillWidth: true
 
 		NodeControl {
 			id: nodeControl
