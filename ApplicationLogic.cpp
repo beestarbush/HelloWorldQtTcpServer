@@ -70,14 +70,14 @@ void ApplicationLogic::onProcessData()
 	uint32_t lReaderUid = 0;
 	if (!mDatabaseController.getReaderIdByMacAddress(lMacAddress, lReaderUid))
 	{
-		qDebug() << "Failed to lookup reader ID.";
+		qDebug() << "Failed to lookup reader ID:" << lMacAddress;
 		return;
 	}
 
 	uint32_t lCardUid = 0;
 	if (!mDatabaseController.getCardUidByCardId(lCardId, lCardUid))
 	{
-		qDebug() << "Failed to lookup card UID.";
+		qDebug() << "Failed to lookup card UID:" << lCardId;
 		return;
 	}
 
@@ -134,4 +134,3 @@ bool ApplicationLogic::determineActiveCombination()
 
 	return false;
 }
-

@@ -30,6 +30,7 @@ class RfidReaderDataObject : public IDataObject
 		void setCardIdField(const CardIdField aField, const uint8_t aValue);
 		uint8_t * getCardId();
 		QString getCardIdString();
+		bool isCardIdEmpty();
 
 	signals:
 		void readerIdChanged();

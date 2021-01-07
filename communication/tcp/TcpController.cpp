@@ -46,6 +46,7 @@ void TcpController::checkConnections()
 		auto lHandler = dynamic_cast<TcpHandler*>(lObject);
 		Q_ASSERT(lHandler != nullptr);
 
+		lHandler->sendKeepAlive();
 		if (!lHandler->getIsConnected())
 		{
 			mConnectionList.erase(lIterator);

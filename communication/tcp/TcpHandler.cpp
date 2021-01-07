@@ -1,12 +1,15 @@
 #include "communication/tcp/TcpHandler.h"
 #include <dataobjects/RfidReaderDataObject.h>
+#include <ReaderDataCallback.h>
 #include <QDebug>
 
 TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
 	QThread(aParent),
 	mParser(),
+	mSocket(nullptr),
 	mSocketDescriptor(aId),
 	mIsConnected(false),
+	mExpectKeepAliveAnswer(false),
 	mNodeInfoData(new NodeInfoDataObject),
 	mRfidReaderData(new RfidReaderDataObject),
 	mCallback(nullptr)
@@ -15,11 +18,20 @@ TcpHandler::TcpHandler(unsigned short aId, QObject * aParent) :
 	mParser.registerDataObject(MessageType::RFID_READER_MESSAGE_TYPE, mRfidReaderData);
 }
 
+TcpHandler::~TcpHandler()
+{
+	delete mSocket;
+	delete mNodeInfoData;
+	delete mRfidReaderData;
+	mCallback = nullptr;
+}
+
 void TcpHandler::run()
 {
 	qDebug() << "Thread started";
 
 	mSocket = new QTcpSocket();
+	mSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
 	if (!mSocket->setSocketDescriptor(mSocketDescriptor))
 	{
@@ -50,6 +62,29 @@ void TcpHandler::registerReaderDataCallback(ReaderDataCallback * aCallback)
 	mCallback = aCallback;
 }
 
+void TcpHandler::sendKeepAlive()
+{
+	if (mExpectKeepAliveAnswer)
+	{
+		if (mKeepAliveAnswerNotReceivedCount < 5)
+		{
+			qWarning() << mSocketDescriptor << " Keep-alive has not been answered (count: " << QString::number(mKeepAliveAnswerNotReceivedCount) << ")";
+			mKeepAliveAnswerNotReceivedCount++;
+		}
+		else
+		{
+			qWarning() << mSocketDescriptor << " Connection is not alive, marking as disconnected.";
+			disconnected();
+		}
+		return;
+	}
+
+	mExpectKeepAliveAnswer = true;
+	mSocket->write("?", 1);
+	mSocket->flush();
+	mSocket->waitForBytesWritten();
+}
+
 bool TcpHandler::getIsConnected() const
 {
 	return mIsConnected;
@@ -74,25 +109,42 @@ void TcpHandler::readyRead()
 	// get the information
 	QByteArray lData = mSocket->readAll();
 
-	// will write on server side window
 	qDebug() << mSocketDescriptor << " Data in: " << lData;
 
+	// Handle keep alive messages.
+	if (mExpectKeepAliveAnswer)
+	{
+		if (lData.toStdString().compare("!") == 0)
+		{
+			mExpectKeepAliveAnswer = false;
+			mKeepAliveAnswerNotReceivedCount = 0;
+			return;
+		}
+	}
+
+	// Handle other messages.
 	if (!mParser.parse(((uint8_t*)lData.data()), lData.count()))
 	{
 		qDebug() << "Unable to parse data.";
-		mSocket->write("NACK");
+		mSocket->write("0", 1);
+		mSocket->flush();
+		mSocket->waitForBytesWritten();
 		return;
 	}
 
-	mSocket->write("ACK");
+	mSocket->write("1", 1);
+	mSocket->flush();
+	mSocket->waitForBytesWritten();
+
+	if (!mNodeInfoData->getMacAddressString().isEmpty() &&
+		!mRfidReaderData->isCardIdEmpty())
+	{
+		mCallback->onReaderDataAvailable(mNodeInfoData->getMacAddressString(), mRfidReaderData->getCardIdString());
+	}
 }
 
 void TcpHandler::disconnected()
 {
 	qDebug() << mSocketDescriptor << " Disconnected";
-
-	mSocket->deleteLater();
 	setIsConnected(false);
 }
-
-

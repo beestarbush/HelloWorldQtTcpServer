@@ -67,3 +67,11 @@ QString RfidReaderDataObject::getCardIdString()
 	}
 	return lCardId;
 }
+
+bool RfidReaderDataObject::isCardIdEmpty()
+{
+	return mCardId[CARD_ID_FIELD_ONE] == 0 &&
+			mCardId[CARD_ID_FIELD_TWO] == 0 &&
+			mCardId[CARD_ID_FIELD_THREE] == 0 &&
+			mCardId[CARD_ID_FIELD_FOUR] == 0;
+}

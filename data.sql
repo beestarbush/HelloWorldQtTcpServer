@@ -10,7 +10,7 @@ CREATE TABLE ReaderDefinitions (
 	mac_address TEXT NOT NULL,
 	description TEXT NOT NULL
 );
-INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(0, "AABBCCDD", "Floor");
+INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(0, "40f5206f9f8", "Floor");
 INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(1, "00112233", "Table");
 
 CREATE TABLE CardDefinitions (
@@ -19,7 +19,7 @@ CREATE TABLE CardDefinitions (
 	description TEXT
 );
 INSERT INTO CardDefinitions(uid, card_id, description) VALUES(0, "-", "Reserved");
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(1, "1020304", "Wood");
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(1, "abcd", "Wood");
 INSERT INTO CardDefinitions(uid, card_id, description) VALUES(2, "2020304", "Stone");
 
 CREATE TABLE FileDefinitions (

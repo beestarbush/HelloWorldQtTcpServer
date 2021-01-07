@@ -19,9 +19,13 @@ class TcpHandler : public QThread
 
 	public:
 		TcpHandler(unsigned short aId, QObject * aParent = nullptr);
+		~TcpHandler();
+
 		void run() override;
 
 		void registerReaderDataCallback(ReaderDataCallback * aCallback);
+
+		void sendKeepAlive();
 
 		bool getIsConnected() const;
 		void setIsConnected(bool aIsConnected);
@@ -42,6 +46,8 @@ class TcpHandler : public QThread
 		QTcpSocket * mSocket;
 		int mSocketDescriptor;
 		bool mIsConnected;
+		bool mExpectKeepAliveAnswer;
+		unsigned char mKeepAliveAnswerNotReceivedCount;
 
 		NodeInfoDataObject * mNodeInfoData;
 		RfidReaderDataObject * mRfidReaderData;
