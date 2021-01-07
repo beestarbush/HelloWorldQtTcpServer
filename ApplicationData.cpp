@@ -5,7 +5,8 @@ ApplicationData::ApplicationData(QObject *parent) :
 	QObject(parent),
 	mCombinations(),
 	mActiveCombinationId(0),
-	mActiveFilename("empty.jpg")
+	mActiveFilename("empty.jpg"),
+	mUnknownIds()
 {
 
 }
@@ -70,4 +71,21 @@ Combinations * ApplicationData::getCombinations()
 Combination ApplicationData::getCombinationByIndex(uint32_t aIndex)
 {
 	return mCombinations[aIndex];
+}
+
+void ApplicationData::addUnknownId(QString aType, QString aId)
+{
+	mUnknownIds += (aType + ": " + aId + "\n");
+	emit unknownIdsChanged();
+}
+
+void ApplicationData::setUnknownIds(QString aIds)
+{
+	mUnknownIds = aIds;
+	emit unknownIdsChanged();
+}
+
+QString ApplicationData::getUnknownIds()
+{
+	return mUnknownIds;
 }

@@ -71,6 +71,7 @@ void ApplicationLogic::onProcessData()
 	if (!mDatabaseController.getReaderIdByMacAddress(lMacAddress, lReaderUid))
 	{
 		qDebug() << "Failed to lookup reader ID:" << lMacAddress;
+		mApplicationData->addUnknownId("Node", lMacAddress);
 		return;
 	}
 
@@ -78,6 +79,7 @@ void ApplicationLogic::onProcessData()
 	if (!mDatabaseController.getCardUidByCardId(lCardId, lCardUid))
 	{
 		qDebug() << "Failed to lookup card UID:" << lCardId;
+		mApplicationData->addUnknownId("Card", lCardId);
 		return;
 	}
 

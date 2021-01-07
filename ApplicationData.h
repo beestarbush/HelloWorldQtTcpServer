@@ -11,7 +11,7 @@ class ApplicationData : public QObject
 	Q_OBJECT
 	Q_PROPERTY(unsigned int qActiveCombinationId READ getActiveCombinationId WRITE setActiveCombinationId NOTIFY activeCombinationIdChanged)
 	Q_PROPERTY(QString qActiveFilename READ getActiveFilename WRITE setActiveFilename NOTIFY activeFilenameChanged)
-
+	Q_PROPERTY(QString qUnknownIds READ getUnknownIds WRITE setUnknownIds NOTIFY unknownIdsChanged)
 
 	public:
 		explicit ApplicationData(QObject *parent = nullptr);
@@ -29,15 +29,21 @@ class ApplicationData : public QObject
 		Combinations * getCombinations();
 		Combination getCombinationByIndex(uint32_t aIndex);
 
+		void addUnknownId(QString aType, QString aId);
+		void setUnknownIds(QString aIds);
+		QString getUnknownIds();
+
 	signals:
 		void combinationsChanged();
 		void activeCombinationIdChanged();
 		void activeFilenameChanged();
+		void unknownIdsChanged();
 
 	private:
 		Combinations mCombinations;
 		uint32_t mActiveCombinationId;
 		QString mActiveFilename;
+		QString mUnknownIds;
 };
 
 #endif // APPLICATIONDATA_H
