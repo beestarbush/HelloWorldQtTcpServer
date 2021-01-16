@@ -3,7 +3,8 @@
 #include <QDebug>
 
 #define DATABASE_VERSION	(1)
-#define DATABASE_LOCATION	("/home/bijstr/workspace/HelloTcpWorld/database.db")
+//#define DATABASE_LOCATION	("/home/bijstr/workspace/HelloTcpWorld/database.db")
+#define DATABASE_LOCATION	("/Users/NaomivanderVeen/Desktop/ProjectTafel/HelloWorldQtTcpServer/database.db")
 //#define DATABASE_LOCATION	("/home/randy/Development/C++/HelloWorldQtTcpServer/database.db")
 
 

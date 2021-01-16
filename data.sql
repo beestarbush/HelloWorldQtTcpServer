@@ -12,8 +12,8 @@ CREATE TABLE ReaderDefinitions (
 );
 INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(0, "40f5206f9f8", "Behang");
 INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(1, "40f5205fa39", "Vloer");
-INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(2, "", "Stoel");
-INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(3, "", "Gordijn");
+INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(2, "40f52062640", "Stoel");
+INSERT INTO ReaderDefinitions(uid, mac_address, description) VALUES(3, "40f52065c93", "Gordijn");
 
 CREATE TABLE CardDefinitions (
 	uid INTEGER PRIMARY KEY,
@@ -21,14 +21,14 @@ CREATE TABLE CardDefinitions (
 	description TEXT
 );
 INSERT INTO CardDefinitions(uid, card_id, description) VALUES(0, "-", "Reserved");
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(1,'1a36e580','Tag1');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(2,'d9464cc2','Tag2');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(3,'1a87d880','Tag3');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(4,'fa26e880','Tag4');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(5,'fa26e880','Tag5');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(6,'fa26e880','Tag6');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(7,'fa26e880','Tag7');
-INSERT INTO CardDefinitions(uid, card_id, description) VALUES(8,'fa26e880','Tag8');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(1,'909c964a','Tag1');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(2,'e0ee964a','Tag2');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(3,'a0be964a','Tag3');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(4,'c0ab954a','Tag4');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(5,'7082954a','Tag5');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(6,'80a2964a','Tag6');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(7,'7057964a','Tag7');
+INSERT INTO CardDefinitions(uid, card_id, description) VALUES(8,'e0f974a','Tag8');
 
 CREATE TABLE FileDefinitions (
 	uid INTEGER PRIMARY KEY,
@@ -121,8 +121,8 @@ INSERT INTO FileDefinitions(combination_id, filename) VALUES(11, "11.png");
 /* 12 - Combination 12 */
 INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(12, 0, 2);
 INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(12, 1, 4);
-INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(11, 2, 5);
-INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(11, 3, 7);
+INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(12, 2, 5);
+INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(12, 3, 7);
 INSERT INTO FileDefinitions(combination_id, filename) VALUES(12, "12.png");
 /* 13 - Combination 13 */
 INSERT INTO CombinationMatrix(combination_id, reader_uid, card_uid) VALUES(13, 0, 1);
